@@ -1,0 +1,443 @@
+-- made by forgotten
+
+local FunCmdsGui = Instance.new("ScreenGui")
+local FunCmds = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local CmdsList = Instance.new("ScrollingFrame")
+local UICorner_2 = Instance.new("UICorner")
+local Fly = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local Noclip = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local Line = Instance.new("TextLabel")
+local Line_2 = Instance.new("TextLabel")
+local TextLabel = Instance.new("TextLabel")
+local SilentAim = Instance.new("TextButton")
+local UICorner_5 = Instance.new("UICorner")
+local Aimbot = Instance.new("TextButton")
+local UICorner_6 = Instance.new("UICorner")
+local Triggerbot = Instance.new("TextButton")
+local UICorner_7 = Instance.new("UICorner")
+local Label = Instance.new("TextLabel")
+local UICorner_8 = Instance.new("UICorner")
+local Close = Instance.new("TextButton")
+local UICorner_9 = Instance.new("UICorner")
+
+--Properties:
+
+FunCmdsGui.Name = "FunCmdsGui"
+FunCmdsGui.Parent = game.CoreGui
+FunCmdsGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+FunCmds.Name = "FunCmds"
+FunCmds.Parent = FunCmdsGui
+FunCmds.BackgroundColor3 = Color3.fromRGB(85, 0, 255)
+FunCmds.Position = UDim2.new(0.0478413068, 0, 0.398843914, 0)
+FunCmds.Size = UDim2.new(0, 215, 0, 238)
+
+UICorner.Parent = FunCmds
+
+CmdsList.Name = "CmdsList"
+CmdsList.Parent = FunCmds
+CmdsList.Active = true
+CmdsList.BackgroundColor3 = Color3.fromRGB(85, 0, 255)
+CmdsList.Position = UDim2.new(0, 0, 0.105042018, 0)
+CmdsList.Size = UDim2.new(0, 215, 0, 213)
+
+UICorner_2.Parent = CmdsList
+
+Fly.Name = "Fly"
+Fly.Parent = CmdsList
+Fly.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+Fly.Position = UDim2.new(0.106976748, 0, 0.0252100844, 0)
+Fly.Size = UDim2.new(0, 166, 0, 30)
+Fly.Font = Enum.Font.FredokaOne
+Fly.Text = "Fly [F]"
+Fly.TextColor3 = Color3.fromRGB(255, 255, 255)
+Fly.TextScaled = true
+Fly.TextSize = 14.000
+Fly.TextWrapped = true
+Fly.MouseButton1Down:connect(function()
+	repeat wait() 
+	until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid") 
+	local mouse = game.Players.LocalPlayer:GetMouse() 
+	repeat wait() until mouse
+	local plr = game.Players.LocalPlayer 
+	local torso = plr.Character.HumanoidRootPart 
+	local flying = true
+	local deb = true 
+	local ctrl = {f = 0, b = 0, l = 0, r = 0} 
+	local lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+	local maxspeed = 50 
+	local speed = 0 
+
+	function Fly() 
+		local bg = Instance.new("BodyGyro", torso) 
+		bg.P = 9e4 
+		bg.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+		bg.cframe = torso.CFrame 
+		local bv = Instance.new("BodyVelocity", torso) 
+		bv.velocity = Vector3.new(0,0.1,0) 
+		bv.maxForce = Vector3.new(9e9, 9e9, 9e9) 
+		repeat wait() 
+			plr.Character.Humanoid.PlatformStand = true 
+			if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then 
+				speed = speed+.5+(speed/maxspeed) 
+				if speed > maxspeed then 
+					speed = maxspeed 
+				end 
+			elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then 
+				speed = speed-1 
+				if speed < 0 then 
+					speed = 0 
+				end 
+			end 
+			if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then 
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+				lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r} 
+			elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then 
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+			else 
+				bv.velocity = Vector3.new(0,0.1,0) 
+			end 
+			bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0) 
+		until not flying 
+		ctrl = {f = 0, b = 0, l = 0, r = 0} 
+		lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+		speed = 0 
+		bg:Destroy() 
+		bv:Destroy() 
+		plr.Character.Humanoid.PlatformStand = false 
+	end 
+	mouse.KeyDown:connect(function(key) 
+		if key:lower() == "f" then 
+			if flying then flying = false 
+			else 
+				flying = true 
+				Fly() 
+			end 
+		elseif key:lower() == "w" then 
+			ctrl.f = 1 
+		elseif key:lower() == "s" then 
+			ctrl.b = -1 
+		elseif key:lower() == "a" then 
+			ctrl.l = -1 
+		elseif key:lower() == "d" then 
+			ctrl.r = 1 
+		end 
+	end) 
+	mouse.KeyUp:connect(function(key) 
+		if key:lower() == "w" then 
+			ctrl.f = 0 
+		elseif key:lower() == "s" then 
+			ctrl.b = 0 
+		elseif key:lower() == "a" then 
+			ctrl.l = 0 
+		elseif key:lower() == "d" then 
+			ctrl.r = 0 
+		end 
+	end)
+	Fly()
+end)
+
+UICorner_3.Parent = Fly
+
+Noclip.Name = "Noclip"
+Noclip.Parent = CmdsList
+Noclip.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+Noclip.Position = UDim2.new(0.106976748, 0, 0.107142858, 0)
+Noclip.Size = UDim2.new(0, 166, 0, 30)
+Noclip.Font = Enum.Font.FredokaOne
+Noclip.Text = "Noclip [coming soon]"
+Noclip.TextColor3 = Color3.fromRGB(255, 255, 255)
+Noclip.TextScaled = true
+Noclip.TextSize = 14.000
+Noclip.TextWrapped = true
+
+UICorner_4.Parent = Noclip
+
+Line.Name = "Line"
+Line.Parent = CmdsList
+Line.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Line.Position = UDim2.new(0, 0, 0.24789916, 0)
+Line.Size = UDim2.new(0, 202, 0, 1)
+Line.Font = Enum.Font.SourceSans
+Line.Text = ""
+Line.TextColor3 = Color3.fromRGB(0, 0, 0)
+Line.TextSize = 14.000
+
+Line_2.Name = "Line"
+Line_2.Parent = CmdsList
+Line_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Line_2.Position = UDim2.new(0, 0, 0.189075619, 0)
+Line_2.Size = UDim2.new(0, 202, 0, 0)
+Line_2.Font = Enum.Font.SourceSans
+Line_2.Text = ""
+Line_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+Line_2.TextSize = 14.000
+
+TextLabel.Parent = CmdsList
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.0697674453, 0, 0.189075619, 0)
+TextLabel.Size = UDim2.new(0, 181, 0, 25)
+TextLabel.Font = Enum.Font.FredokaOne
+TextLabel.Text = "OP Cmds"
+TextLabel.TextColor3 = Color3.fromRGB(30, 244, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextStrokeTransparency = 0.000
+TextLabel.TextWrapped = true
+
+SilentAim.Name = "SilentAim"
+SilentAim.Parent = CmdsList
+SilentAim.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+SilentAim.Position = UDim2.new(0.0837209374, 0, 0.266806722, 0)
+SilentAim.Size = UDim2.new(0, 166, 0, 30)
+SilentAim.Font = Enum.Font.FredokaOne
+SilentAim.Text = "Silent Aim"
+SilentAim.TextColor3 = Color3.fromRGB(255, 255, 255)
+SilentAim.TextScaled = true
+SilentAim.TextSize = 14.000
+SilentAim.TextWrapped = true
+SilentAim.MouseButton1Down:connect(function()
+	local Players = game:GetService("Players")
+	local LocalPlayer = Players.LocalPlayer
+	local mouse = LocalPlayer:GetMouse()
+	local Camera = workspace.CurrentCamera
+	local Debris = game:GetService("Debris")
+	local UserInputService = game:GetService("UserInputService")
+	local target = false
+	local RunService = game:GetService("RunService")
+
+
+	getfenv().lock = "Random" -- Head or Hitbox or Random
+
+	fov = 250;
+	local fovCircle = true;
+	local st = tonumber(tick());
+	warn("Loading script...")
+
+	if fovCircle then
+		function createcircle()
+			local a=Drawing.new('Circle');a.Transparency=1;a.Thickness=1.5;a.Visible=true;a.Color=Color3.fromRGB(0,255,149);a.Filled=false;a.Radius=fov;
+			return a;
+		end;  
+		local fovc = createcircle();
+		spawn(function()
+			RunService:BindToRenderStep("FovCircle",1,function()
+				fovc.Position = Vector2.new(mouse.X,mouse.Y)
+			end);
+		end);
+	end;
+
+	function isFfa()
+		local am = #Players:GetChildren();
+		local amm = 0;
+		for i , v in pairs(Players:GetChildren()) do
+			if v.Team == LocalPlayer.Team then
+				amm = amm + 1;
+			end;
+		end;
+		return am == amm;
+	end;
+	function getnearest()
+		local nearestmagnitude = math.huge
+		local nearestenemy = nil
+		local vector = nil
+		local ffa = isFfa();
+		for i,v in next, Players:GetChildren() do
+			if ffa == false and v.Team ~= LocalPlayer.Team or ffa == true then
+				if v.Character and  v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
+					local vector, onScreen = Camera:WorldToScreenPoint(v.Character["HumanoidRootPart"].Position)
+					if onScreen then
+						local ray = Ray.new(
+							Camera.CFrame.p,
+							(v.Character["Head"].Position-Camera.CFrame.p).unit*500
+						)
+						local ignore = {
+							LocalPlayer.Character,
+						}
+						local hit,position,normal=workspace:FindPartOnRayWithIgnoreList(ray,ignore)
+						if hit and hit:FindFirstAncestorOfClass("Model") and Players:FindFirstChild(hit:FindFirstAncestorOfClass("Model").Name)then
+							local magnitude = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(vector.X, vector.Y)).magnitude
+							if magnitude < nearestmagnitude and magnitude <= fov then
+								nearestenemy = v
+								nearestmagnitude = magnitude
+							end
+						end
+					end
+				end
+			end
+		end
+		return nearestenemy
+	end
+
+
+	local meta = getrawmetatable(game)
+	setreadonly(meta, false)
+	local oldNamecall = meta.__namecall
+	meta.__namecall = newcclosure(function(...)
+
+		local method = getnamecallmethod()
+		local args = {...}
+		if string.find(method,'Ray') then
+			if target then
+				if args[1].Name ~= "Workspace" then
+					print(args[1])
+				end;
+				args[2] = Ray.new(workspace.CurrentCamera.CFrame.Position, (target.Position + Vector3.new(0,(workspace.CurrentCamera.CFrame.Position-target.Position).Magnitude/500,0) - workspace.CurrentCamera.CFrame.Position).unit * 5000)
+			end
+		end
+		return oldNamecall(unpack(args))
+	end)
+
+	warn("Script loaded!\nTime taken: "..math.abs(tonumber(tick())-st))
+	RunService:BindToRenderStep("SilentAim",1,function()
+		if UserInputService:IsMouseButtonPressed(0) and Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChild("Humanoid") and Players.LocalPlayer.Character.Humanoid.Health > 0 then
+			local enemy = getnearest()
+			if enemy and enemy.Character and enemy.Character:FindFirstChild("Humanoid") and enemy.Character.Humanoid.Health > 0 then                
+				local vector, onScreen = Camera:WorldToScreenPoint(enemy.Character["Head"].Position)
+				local head = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(vector.X, vector.Y)).magnitude
+				local vector, onScreen = Camera:WorldToScreenPoint(enemy.Character["HumanoidRootPart"].Position)
+				local hitbox = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(vector.X, vector.Y)).magnitude
+				if head <= hitbox then
+					magnitude = head
+				else
+					magnitude = hitbox;
+				end;
+				if getfenv().lock == "Head" then
+					target = workspace[enemy.Name]["Head"]
+				else
+					if getfenv().lock == "Random" then
+						if magnitude == hitbox then
+							target = workspace[enemy.Name]["HumanoidRootPart"];
+						else
+							target = workspace[enemy.Name]["Head"]
+						end;
+					else
+						target = workspace[enemy.Name]["HumanoidRootPart"];
+					end;
+
+				end;
+			else
+				target = nil
+			end
+		end
+	end)
+end)
+
+UICorner_5.Parent = SilentAim
+
+Aimbot.Name = "Aimbot"
+Aimbot.Parent = CmdsList
+Aimbot.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+Aimbot.Position = UDim2.new(0.0837209374, 0, 0.422268897, 0)
+Aimbot.Size = UDim2.new(0, 166, 0, 30)
+Aimbot.Font = Enum.Font.FredokaOne
+Aimbot.Text = "Aimbot [coming soon]"
+Aimbot.TextColor3 = Color3.fromRGB(255, 255, 255)
+Aimbot.TextScaled = true
+Aimbot.TextSize = 14.000
+Aimbot.TextWrapped = true
+
+UICorner_6.Parent = Aimbot
+
+Triggerbot.Name = "Triggerbot"
+Triggerbot.Parent = CmdsList
+Triggerbot.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+Triggerbot.Position = UDim2.new(0.0837209225, 0, 0.340336084, 0)
+Triggerbot.Size = UDim2.new(0, 166, 0, 30)
+Triggerbot.Font = Enum.Font.FredokaOne
+Triggerbot.Text = "Triggerbot"
+Triggerbot.TextColor3 = Color3.fromRGB(255, 255, 255)
+Triggerbot.TextScaled = true
+Triggerbot.TextSize = 14.000
+Triggerbot.TextWrapped = true
+Triggerbot.MouseButton1Down:connect(function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/VapingCat/Open-Source-TriggerBot/main/script.lua'))()
+end)
+
+UICorner_7.Parent = Triggerbot
+
+Label.Name = "Label"
+Label.Parent = FunCmds
+Label.BackgroundColor3 = Color3.fromRGB(60, 35, 204)
+Label.Size = UDim2.new(0, 189, 0, 25)
+Label.Font = Enum.Font.FredokaOne
+Label.Text = "Fun Cmds"
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextScaled = true
+Label.TextSize = 14.000
+Label.TextStrokeTransparency = 0.000
+Label.TextWrapped = true
+
+UICorner_8.Parent = Label
+
+Close.Name = "Close"
+Close.Parent = FunCmds
+Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Close.Position = UDim2.new(0.897674441, 0, 0, 0)
+Close.Size = UDim2.new(0, 22, 0, 25)
+Close.Font = Enum.Font.FredokaOne
+Close.Text = "X"
+Close.TextColor3 = Color3.fromRGB(255, 0, 0)
+Close.TextSize = 14.000
+Close.TextStrokeTransparency = 0.000
+
+UICorner_9.Parent = Close
+
+-- Scripts:
+
+local function JCVE_fake_script() -- FunCmds.Dragify 
+	local script = Instance.new('LocalScript', FunCmds)
+
+	local UIS = game:GetService("UserInputService")
+	function dragify(Frame)
+	    dragToggle = nil
+	    local dragSpeed = 0
+	    dragInput = nil
+	    dragStart = nil
+	    local dragPos = nil
+	    function updateInput(input)
+	        local Delta = input.Position - dragStart
+	        local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+	        game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+	    end
+	    Frame.InputBegan:Connect(function(input)
+	        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+	            dragToggle = true
+	            dragStart = input.Position
+	            startPos = Frame.Position
+	            input.Changed:Connect(function()
+	                if input.UserInputState == Enum.UserInputState.End then
+	                    dragToggle = false
+	                end
+	            end)
+	        end
+	    end)
+	    Frame.InputChanged:Connect(function(input)
+	        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+	            dragInput = input
+	        end
+	    end)
+	    game:GetService("UserInputService").InputChanged:Connect(function(input)
+	        if input == dragInput and dragToggle then
+	            updateInput(input)
+	        end
+	    end)
+	end
+	
+	dragify(script.Parent)
+end
+coroutine.wrap(JCVE_fake_script)()
+local function CBABNK_fake_script() -- Close.CloseScript 
+	local script = Instance.new('LocalScript', Close)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.Visible = false
+	end)
+	
+end
+coroutine.wrap(CBABNK_fake_script)()
